@@ -1,5 +1,18 @@
 mod day_01;
 
+macro_rules! run_all {
+    ($($l:ident),+ $(,)?) => {
+        {
+            $(
+                println!("{}a: {}", stringify!($l), $l::run_part_a());
+                println!("{}b: {}\n", stringify!($l), $l::run_part_b());
+            )+
+        }
+    }
+}
+
 fn main() {
-    println!("Day 01a: {}\nDay 01b: {}", day_01::run_part_a(), day_01::run_part_b());
+    run_all!(
+        day_01,
+    );
 }
