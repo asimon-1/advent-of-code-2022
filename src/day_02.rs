@@ -1,8 +1,10 @@
-#[derive(Debug)]
+use num_traits::FromPrimitive;
+
+#[derive(Debug, FromPrimitive)]
 enum RPS {
-    Rock = 1,
-    Paper = 2,
-    Scissors = 3,
+    Rock = 0,
+    Paper = 1,
+    Scissors = 2,
 }
 
 impl RPS {
@@ -15,7 +17,11 @@ impl RPS {
         }
     }
 
-    fn beats(&self, other: &RPS) -> Outcome {
+    fn from_round_outcome(opp: &RPS, out: &Outcome) -> RPS {
+        FromPrimitive::from_u32((*opp as u32 + *out as u32).rem_euclid(3)).unwrap()
+    }
+
+    fn match_against(&self, other: &RPS) -> Outcome {
         match (*self as i32 - *other as i32).rem_euclid(3) {
             0 => Outcome::Draw,
             1 => Outcome::Win,
@@ -29,33 +35,72 @@ impl RPS {
         }
     }
 
-    fn score(&self, other: &RPS) -> u32 {
-        *self as u32 + self.beats(other) as u32
+    fn score(&self) -> u32 {
+        match self {
+            RPS::Rock => 1,
+            RPS::Paper => 2,
+            RPS::Scissors => 3,
+        }
     }
 }
 
 enum Outcome {
-    Win = 6,
-    Draw = 3,
-    Loss = 0,
+    Draw = 0,
+    Win = 1,
+    Loss = 2,
 }
 
-fn get_round_score(s: &str) -> u32 {
+impl Outcome {
+    fn from_char(s: &str) -> Outcome {
+        match s {
+            "X" => Outcome::Loss,
+            "Y" => Outcome::Draw,
+            "Z" => Outcome::Win,
+            _ => panic!("Unrecognized outcome character: {}", s),
+        }
+    }
+
+    fn score(&self) -> u32 {
+        match self {
+            Outcome::Loss => 0,
+            Outcome::Draw => 3,
+            Outcome::Win => 6,
+        }
+    }
+}
+
+fn get_round_score(me: RPS, outcome: Outcome) -> u32 {
+    me.score() + outcome.score()
+}
+
+fn get_round_score_part_a(s: &str) -> u32 {
     if let Some((opp, me)) = s.split_once(" ") {
         let opp_rps = RPS::from_char(opp);
         let me_rps = RPS::from_char(me);
-        me_rps.score(&opp_rps)
+        let out = me_rps.match_against(&opp_rps);
+        get_round_score(me_rps, out)
+    } else {
+        0
+    }
+}
+
+fn get_round_score_part_b(s: &str) -> u32 {
+    if let Some((opp, out)) = s.split_once(" ") {
+        let opp_rps = RPS::from_char(opp);
+        let out_outcome = Outcome::from_char(out);
+        let me_rps = RPS::from_round_outcome(&opp_rps, &out_outcome);
+        get_round_score(me_rps, out_outcome)
     } else {
         0
     }
 }
 
 fn part_a(input: &str) -> u32 {
-    input.lines().map(|s| get_round_score(s)).sum()
+    input.lines().map(|s| get_round_score_part_a(s)).sum()
 }
 
 fn part_b(input: &str) -> u32 {
-    0
+    input.lines().map(|s| get_round_score_part_b(s)).sum()
 }
 
 pub fn run_part_a() -> u32 {
