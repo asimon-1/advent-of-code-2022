@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate num_derive;
-
 mod day_01;
 mod day_02;
 

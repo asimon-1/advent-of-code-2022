@@ -1,106 +1,66 @@
-use num_traits::FromPrimitive;
-
-#[derive(Debug, FromPrimitive)]
-enum RPS {
-    Rock = 0,
-    Paper = 1,
-    Scissors = 2,
+enum Round {
+    AX,
+    AY,
+    AZ,
+    BX,
+    BY,
+    BZ,
+    CX,
+    CY,
+    CZ,
 }
 
-impl RPS {
-    fn from_char(s: &str) -> RPS {
+impl Round {
+    fn from_str(s: &str) -> Round {
         match s {
-            "A" | "X" => RPS::Rock,
-            "B" | "Y" => RPS::Paper,
-            "C" | "Z" => RPS::Scissors,
-            _ => panic!("Unrecognized RPS character: {}", s),
+            "A X" => Round::AX,
+            "A Y" => Round::AY,
+            "A Z" => Round::AZ,
+            "B X" => Round::BX,
+            "B Y" => Round::BY,
+            "B Z" => Round::BZ,
+            "C X" => Round::CX,
+            "C Y" => Round::CY,
+            "C Z" => Round::CZ,
+            _ => panic!("Unrecognized str for Round: {}", s)
         }
     }
 
-    fn from_round_outcome(opp: &RPS, out: &Outcome) -> RPS {
-        FromPrimitive::from_u32((*opp as u32 + *out as u32).rem_euclid(3)).unwrap()
-    }
-
-    fn match_against(&self, other: &RPS) -> Outcome {
-        match (*self as i32 - *other as i32).rem_euclid(3) {
-            0 => Outcome::Draw,
-            1 => Outcome::Win,
-            2 => Outcome::Loss,
-            _ => panic!(
-                "Didn't expect outcome value {:?} for self {:?} and other {:?}",
-                (*self as i32 - *other as i32).rem_euclid(3),
-                self,
-                other
-            ),
-        }
-    }
-
-    fn score(&self) -> u32 {
+    fn score_part_a(self) -> u32 {
         match self {
-            RPS::Rock => 1,
-            RPS::Paper => 2,
-            RPS::Scissors => 3,
-        }
-    }
-}
-
-enum Outcome {
-    Draw = 0,
-    Win = 1,
-    Loss = 2,
-}
-
-impl Outcome {
-    fn from_char(s: &str) -> Outcome {
-        match s {
-            "X" => Outcome::Loss,
-            "Y" => Outcome::Draw,
-            "Z" => Outcome::Win,
-            _ => panic!("Unrecognized outcome character: {}", s),
+            Round::AX => { 1 + 3 },
+            Round::AY => { 2 + 6 },
+            Round::AZ => { 3 + 0 },
+            Round::BX => { 1 + 0 },
+            Round::BY => { 2 + 3 },
+            Round::BZ => { 3 + 6 },
+            Round::CX => { 1 + 6 },
+            Round::CY => { 2 + 0 },
+            Round::CZ => { 3 + 3 },
         }
     }
 
-    fn score(&self) -> u32 {
+    fn score_part_b(self) -> u32 {
         match self {
-            Outcome::Loss => 0,
-            Outcome::Draw => 3,
-            Outcome::Win => 6,
+            Round::AX => { 3 + 0 },
+            Round::AY => { 1 + 3 },
+            Round::AZ => { 2 + 6 },
+            Round::BX => { 1 + 0 },
+            Round::BY => { 2 + 3 },
+            Round::BZ => { 3 + 6 },
+            Round::CX => { 2 + 0 },
+            Round::CY => { 3 + 3 },
+            Round::CZ => { 1 + 6 },
         }
-    }
-}
-
-fn get_round_score(me: RPS, outcome: Outcome) -> u32 {
-    me.score() + outcome.score()
-}
-
-fn get_round_score_part_a(s: &str) -> u32 {
-    if let Some((opp, me)) = s.split_once(" ") {
-        let opp_rps = RPS::from_char(opp);
-        let me_rps = RPS::from_char(me);
-        let out = me_rps.match_against(&opp_rps);
-        get_round_score(me_rps, out)
-    } else {
-        0
-    }
-}
-
-fn get_round_score_part_b(s: &str) -> u32 {
-    if let Some((opp, out)) = s.split_once(" ") {
-        let opp_rps = RPS::from_char(opp);
-        let out_outcome = Outcome::from_char(out);
-        let me_rps = RPS::from_round_outcome(&opp_rps, &out_outcome);
-        get_round_score(me_rps, out_outcome)
-    } else {
-        0
     }
 }
 
 fn part_a(input: &str) -> u32 {
-    input.lines().map(|s| get_round_score_part_a(s)).sum()
+    input.lines().map(|s| Round::from_str(s).score_part_a()).sum()
 }
 
 fn part_b(input: &str) -> u32 {
-    input.lines().map(|s| get_round_score_part_b(s)).sum()
+    input.lines().map(|s| Round::from_str(s).score_part_b()).sum()
 }
 
 pub fn run_part_a() -> u32 {
