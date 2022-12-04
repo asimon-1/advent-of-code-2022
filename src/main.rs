@@ -1,6 +1,7 @@
 mod day_01;
 mod day_02;
 mod day_03;
+mod day_04;
 
 macro_rules! run_all {
     ($($l:ident),+ $(,)?) => {
@@ -18,5 +19,6 @@ fn main() {
         day_01,
         day_02,
         day_03,
+        day_04,
     );
 }
