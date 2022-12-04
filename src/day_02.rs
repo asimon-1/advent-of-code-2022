@@ -63,24 +63,5 @@ fn part_b(input: &str) -> u32 {
     input.lines().map(|s| Round::from_str(s).score_part_b()).sum()
 }
 
-pub fn run_part_a() -> u32 {
-    let input = include_str!("../input/2.txt");
-    part_a(input)
-}
-
-pub fn run_part_b() -> u32 {
-    let input = include_str!("../input/2.txt");
-    part_b(input)
-}
-
-#[test]
-fn part_a_test() {
-    let input = include_str!("../input_test/2.txt");
-    assert_eq!(part_a(input), 15);
-}
-
-#[test]
-fn part_b_test() {
-    let input = include_str!("../input_test/2.txt");
-    assert_eq!(part_b(input), 12);
-}
+pub use crate::boilerplate;
+boilerplate!(2, 15, 12);

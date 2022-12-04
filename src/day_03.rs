@@ -41,24 +41,5 @@ fn part_b(input: &str) -> u32 {
         .sum()
 }
 
-pub fn run_part_a() -> u32 {
-    let input = include_str!("../input/3.txt");
-    part_a(input)
-}
-
-pub fn run_part_b() -> u32 {
-    let input = include_str!("../input/3.txt");
-    part_b(input)
-}
-
-#[test]
-fn part_a_test() {
-    let input = include_str!("../input_test/3.txt");
-    assert_eq!(part_a(input), 157);
-}
-
-#[test]
-fn part_b_test() {
-    let input = include_str!("../input_test/3.txt");
-    assert_eq!(part_b(input), 70);
-}
+pub use crate::boilerplate;
+boilerplate!(3, 157, 70);
