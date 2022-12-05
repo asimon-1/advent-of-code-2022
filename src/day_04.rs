@@ -40,4 +40,4 @@ fn part_b(input: &str) -> u32 {
 }
 
 pub use crate::boilerplate;
-boilerplate!(4, 2, 4);
+boilerplate!(4, 2, 4, u32);

@@ -50,4 +50,4 @@ fn part_b(input: &str) -> u32 {
 }
 
 pub use crate::boilerplate;
-boilerplate!(1, 24_000, 45_000);
+boilerplate!(1, 24_000, 45_000, u32);
