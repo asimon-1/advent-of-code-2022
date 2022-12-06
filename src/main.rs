@@ -5,6 +5,7 @@ mod day_02;
 mod day_03;
 mod day_04;
 mod day_05;
+mod day_06;
 
 macro_rules! run_all {
     ($($l:ident),+ $(,)?) => {
@@ -59,5 +60,5 @@ fn get_input(day: u8, test: bool) -> Result<String, std::io::Error> {
 }
 
 fn main() {
-    run_all!(day_01, day_02, day_03, day_04, day_05,);
+    run_all!(day_01, day_02, day_03, day_04, day_05, day_06,);
 }
